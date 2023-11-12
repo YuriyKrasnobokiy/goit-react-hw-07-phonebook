@@ -4,7 +4,8 @@ import { FormBtn, FormLabel, FormPhoneBook } from './Form.Styled';
 import { ErrorMessage, Field, Formik } from 'formik';
 import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { redAddContact } from 'redux/contactsSlice';
+import { selectContacts } from 'redux/selectors';
+import { addContact } from 'redux/operations';
 
 const schema = yup.object().shape({
   name: yup.string().min(2).required('Required'),
@@ -12,11 +13,7 @@ const schema = yup.object().shape({
 });
 
 export const AddForm = () => {
-  const initialValues = {
-    name: '',
-    number: '',
-  };
-  const contacts = useSelector(state => state.contactsStore.contacts);
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
 
   const handleSubmit = (values, { resetForm }) => {
@@ -36,13 +33,16 @@ export const AddForm = () => {
         `${newContact.name} or ${newContact.number} is already in contacts!`
       );
     }
-    dispatch(redAddContact(newContact));
+    dispatch(addContact(newContact));
     resetForm();
   };
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={{
+        name: '',
+        number: '',
+      }}
       validationSchema={schema}
       onSubmit={handleSubmit}
     >

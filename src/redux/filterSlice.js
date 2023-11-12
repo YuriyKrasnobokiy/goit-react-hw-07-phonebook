@@ -5,7 +5,7 @@ const filterSlice = createSlice({
   initialState: '',
   reducers: {
     redChangeFilter(state, action) {
-      state.filter = action.payload;
+      return action.payload;
     },
   },
 });
